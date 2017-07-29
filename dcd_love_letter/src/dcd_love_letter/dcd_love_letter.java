@@ -7,13 +7,24 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 
+// player_status
+class Player {
+	int score;
+	ArrayList<Integer> used_cards = new ArrayList<Integer>();
+	int last_used_card;
+	int card_in_hand;
+	int drawn_card;
+	int ai_tendency;
+}
+
 public class dcd_love_letter {
 
 	public int player_num;
-	public int player_id;
+	public int user_id;
 	public int turn;
 	public int[] score = new int[4];
 	public ArrayList<Integer> deck = new ArrayList<Integer>();
+	public ArrayList<Player> players = new ArrayList<Player>(); 
 	
 	public int get_int_input() throws IOException {
 		return System.in.read() - 48;
@@ -31,23 +42,17 @@ public class dcd_love_letter {
         this.player_num = this.get_int_input();
         //System.out.println("player number: " + this.player_num);
         
-        this.player_id = generator.nextInt(this.player_num);
+        this.user_id = generator.nextInt(this.player_num);
         
-        System.out.println("your id: " + this.player_id);
+        System.out.println("your id: " + this.user_id);
         
-        // init score
+        // create players & init score
         for (i = 0; i < this.player_num; i++)
         {
-        	this.score[i] = 0;
+        	Player p = new Player();
+        	p.score = 0;
+        	players.add(p);
         }
-        
-        shuffle_deck();
-
-        // test shuffle & draw a card
-//        while (!deck.isEmpty())
-//        {
-//        	System.out.print(draw_a_card());
-//        }
     }
 
     
@@ -88,6 +93,14 @@ public class dcd_love_letter {
 //    
     public void init_round(){
         turn = 0;
+
+        shuffle_deck();
+
+        // test shuffle & draw a card
+        while (!deck.isEmpty())
+        {
+        	System.out.print(draw_a_card());
+        }
     }
     
     // asfsfs
@@ -101,7 +114,7 @@ public class dcd_love_letter {
     }
     
     public void player_action() {
-    	
+    	// draw_a_card
     }
     
     public void computer_action() {
