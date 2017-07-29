@@ -131,7 +131,7 @@ public class dcd_love_letter {
     	Player p;
     	int cur_player_id;
     	
-    	System.out.println("current turn " + this.turn);
+    	System.out.println("current turn " + this.turn + " next player id " + this.next_player_id);
     	
     	for (int i = 0; i < this.player_num; i++)
     	{
@@ -146,35 +146,16 @@ public class dcd_love_letter {
     	return -1;
     }
     
-    public void print_board_status() {
-    	Player p;
-    	
-    	System.out.flush();
-    	
-    	for (int i = 0; i < this.player_num; i++)
-    	{
-    		p = players.get(i);
-    		System.out.print("ID " + i + " used cards: ");
-    		for (int used: p.used_cards)
-    		{
-    			System.out.print(used);
-    		}
-    		System.out.println();
-    	}
-    }
-    
     public void player_action(Player p) throws IOException {
     	Random gen = new Random();
     	
     	// draw a card
     	p.drawn_card = this.draw_a_card();
     	
-    	System.out.println("id: " + p.id + " player");
-
     	// print cards in hand and just drawn
     	
     	// get input user selection to use
-    	System.out.println("select card: ");
+    	System.out.print("select card: ");
     	
     	// print selected card
     	
@@ -184,6 +165,8 @@ public class dcd_love_letter {
     	
 
     	
+    	//System.out.print("id: " + p.id + " player");
+
 //    	if (gen.nextInt(4) == 0)
 //    	{
 //    		p.status = 0;
@@ -203,20 +186,18 @@ public class dcd_love_letter {
 
     	p.drawn_card = this.draw_a_card();
 
-    	System.out.println("id: " + p.id + " computer used " + p.drawn_card);
-    	
-    	p.used_cards.add(p.drawn_card);
+    	System.out.print("id: " + p.id + " computer");
 
-//    	if (gen.nextInt(4) == 0)
-//    	{
-//    		p.status = 0;
-//    		this.living_player_num--;
-//    		System.out.println(" died");    		
-//    	}
-//    	else
-//    	{
-//    		System.out.println(" lived");    		
-//    	}
+    	if (gen.nextInt(4) == 0)
+    	{
+    		p.status = 0;
+    		this.living_player_num--;
+    		System.out.println(" died");    		
+    	}
+    	else
+    	{
+    		System.out.println(" lived");    		
+    	}
     }
     
     public boolean check_round_over() {
@@ -235,25 +216,7 @@ public class dcd_love_letter {
     	
     	if (this.deck.isEmpty())
     	{
-    		int best_score = 0;
-    		int best_player = 0;
-    		Player p;
-    		
     		System.out.println("deck is empty");
-    		for (int i = 0; i < this.player_num; i++)
-    		{
-    			p = players.get(i);
-    			if (p.status == 1)
-    			{
-    				if (p.card_in_hand > best_score)
-    				{
-    					best_player = i;
-    					best_score = p.card_in_hand;
-    				}
-    			}
-    		}
-    		System.out.println("id " + best_player + " score " + best_score);
-    		
     		return true;
     	}
     	
@@ -281,8 +244,6 @@ public class dcd_love_letter {
         		int cur_player_id;
         		Player p;
 
-        		game.print_board_status();
-        		
         		cur_player_id = game.select_player_id();
 
         		p = players.get(cur_player_id);
