@@ -5,7 +5,7 @@ public class dcd_love_letter {
 	public int player_num;
 	public int turn;
 	
-	// 1234
+	// 1234asdf414141414
     public void init_game () {
         
     }
@@ -47,6 +47,8 @@ public class dcd_love_letter {
     	game.player_num = 4; // need to be input
 
     	game.init_game();
+    	
+    	System.out.println("hell");
 
         while (true)
         {
