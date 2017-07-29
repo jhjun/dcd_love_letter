@@ -169,10 +169,12 @@ public class dcd_love_letter {
     	// draw a card
     	p.drawn_card = this.draw_a_card();
     	
+    	System.out.println("id: " + p.id + " player");
+
     	// print cards in hand and just drawn
     	
     	// get input user selection to use
-    	System.out.print("select card: ");
+    	System.out.println("select card: ");
     	
     	// print selected card
     	
@@ -182,8 +184,6 @@ public class dcd_love_letter {
     	
 
     	
-    	//System.out.print("id: " + p.id + " player");
-
 //    	if (gen.nextInt(4) == 0)
 //    	{
 //    		p.status = 0;
@@ -203,7 +203,7 @@ public class dcd_love_letter {
 
     	p.drawn_card = this.draw_a_card();
 
-    	System.out.print("id: " + p.id + " computer");
+    	System.out.println("id: " + p.id + " computer used " + p.drawn_card);
     	
     	p.used_cards.add(p.drawn_card);
 
@@ -235,7 +235,25 @@ public class dcd_love_letter {
     	
     	if (this.deck.isEmpty())
     	{
+    		int best_score = 0;
+    		int best_player = 0;
+    		Player p;
+    		
     		System.out.println("deck is empty");
+    		for (int i = 0; i < this.player_num; i++)
+    		{
+    			p = players.get(i);
+    			if (p.status == 1)
+    			{
+    				if (p.card_in_hand > best_score)
+    				{
+    					best_player = i;
+    					best_score = p.card_in_hand;
+    				}
+    			}
+    		}
+    		System.out.println("id " + best_player + " score " + best_score);
+    		
     		return true;
     	}
     	
