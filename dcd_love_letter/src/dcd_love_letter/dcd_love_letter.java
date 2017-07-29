@@ -5,7 +5,7 @@ public class dcd_love_letter {
 	public int player_num;
 	public int turn;
 	
-	// ddsdfasdfasdfasdfasdfasdfasdfasdfasdfasd
+	// 1234
     public void init_game () {
         
     }
