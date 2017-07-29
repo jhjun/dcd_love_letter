@@ -14,7 +14,9 @@ class Player {
 	int last_used_card;
 	int card_in_hand;
 	int drawn_card;
-	int ai_tendency;
+	int computer; // 0: human, 1~: ai tendency
+	int status; // 0: die, 1: live
+	int id;
 }
 
 public class dcd_love_letter {
@@ -22,9 +24,11 @@ public class dcd_love_letter {
 	public int player_num;
 	public int user_id;
 	public int turn;
+	public int next_player_id;
 	public int[] score = new int[4];
 	public ArrayList<Integer> deck = new ArrayList<Integer>();
-	public ArrayList<Player> players = new ArrayList<Player>(); 
+	public static ArrayList<Player> players = new ArrayList<Player>(); 
+	public int living_player_num;
 	
 	public int get_int_input() throws IOException {
 		return System.in.read() - 48;
@@ -35,7 +39,6 @@ public class dcd_love_letter {
 //	output: 
 //		none
     public void init_game() throws IOException {
-    	int i;
     	Random generator = new Random();
     	
     	System.out.print("input player number(2~4): ");
@@ -47,12 +50,19 @@ public class dcd_love_letter {
         System.out.println("your id: " + this.user_id);
         
         // create players & init score
-        for (i = 0; i < this.player_num; i++)
+        for (int i = 0; i < this.player_num; i++)
         {
         	Player p = new Player();
+        	if (i == this.user_id)
+        		p.computer = 0; // human
+        	else
+        		p.computer = 1; // computer
         	p.score = 0;
+        	p.id = i;
         	players.add(p);
         }
+        
+        this.next_player_id = 0;
     }
 
     
@@ -92,37 +102,112 @@ public class dcd_love_letter {
 //  output:  
 //    
     public void init_round(){
-        turn = 0;
+        this.turn = 0;
+        Player p;
 
         shuffle_deck();
 
         // test shuffle & draw a card
-        while (!deck.isEmpty())
+//        while (!deck.isEmpty())
+//        {
+//        	System.out.print(draw_a_card());
+//        }
+        
+        this.living_player_num = this.player_num;
+        
+        for (int i = 0; i < this.player_num; i++)
         {
-        	System.out.print(draw_a_card());
+        	p = players.get(i);
+        	p.card_in_hand = 0;
+        	p.drawn_card = 0;
+        	p.last_used_card = 0;
+        	p.status = 1;
         }
     }
     
-    // asfsfs
-    
-    public int select_player() {
-    	int player;
+    public int select_player_id() {
+    	Player p;
+    	int cur_player_id;
     	
-    	player = 0; // 0, 1, 2, 3
+    	System.out.println("current turn " + this.turn + " next player id " + this.next_player_id);
     	
-        return player;
+    	for (int i = 0; i < this.player_num; i++)
+    	{
+    		p = players.get((this.next_player_id + i) % this.player_num);
+    		if (p.status == 1)
+    		{
+    			cur_player_id = (this.next_player_id + i) % this.player_num;
+    			this.next_player_id = (cur_player_id + 1) % this.player_num;
+    			return cur_player_id;
+    		}
+    	}
+    	return -1;
     }
     
-    public void player_action() {
-    	// draw_a_card
+    public void player_action(Player p) {
+    	Random gen = new Random();
+    	
+    	// draw a card
+    	p.drawn_card = this.draw_a_card();
+    	
+    	// used a card
+    	
+    	System.out.print("id: " + p.id + " player");
+
+    	if (gen.nextInt(4) == 0)
+    	{
+    		p.status = 0;
+    		this.living_player_num--;
+    		System.out.println(" died");    		
+    	}
+    	else
+    	{
+    		System.out.println(" lived");    		
+    	}
+    	
     }
     
-    public void computer_action() {
+    public void computer_action(Player p) {
     	// bongjun 
+    	Random gen = new Random();
+
+    	p.drawn_card = this.draw_a_card();
+
+    	System.out.print("id: " + p.id + " computer");
+
+    	if (gen.nextInt(4) == 0)
+    	{
+    		p.status = 0;
+    		this.living_player_num--;
+    		System.out.println(" died");    		
+    	}
+    	else
+    	{
+    		System.out.println(" lived");    		
+    	}
     }
     
     public boolean check_round_over() {
-    	return true;
+    	turn++;
+    	
+    	if (this.living_player_num == 1)
+    	{
+    		System.out.println("one player remained");
+    		for (Player p: players)
+    		{
+    			if (p.status == 1)
+    				System.out.println("id " + p.id + " win");
+    		}
+    		return true;
+    	}
+    	
+    	if (this.deck.isEmpty())
+    	{
+    		System.out.println("deck is empty");
+    		return true;
+    	}
+    	
+    	return false;
     }
     
     public boolean check_game_over() {
@@ -143,14 +228,17 @@ public class dcd_love_letter {
 
         	while (true)
         	{
-        		int cur_player;
+        		int cur_player_id;
+        		Player p;
 
-        		cur_player = game.select_player();
+        		cur_player_id = game.select_player_id();
+
+        		p = players.get(cur_player_id);
         		
-        		if (cur_player == 0)
-        			game.player_action();
+        		if (p.computer == 0)
+        			game.player_action(p);
         		else
-        			game.computer_action();
+        			game.computer_action(p);
         		
         		if (game.check_round_over())
         			break;
