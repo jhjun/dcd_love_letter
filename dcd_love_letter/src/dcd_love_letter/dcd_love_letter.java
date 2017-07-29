@@ -113,15 +113,17 @@ public class dcd_love_letter {
 //        	System.out.print(draw_a_card());
 //        }
         
+        this.draw_a_card(); // throw away a card
+        
         this.living_player_num = this.player_num;
         
         for (int i = 0; i < this.player_num; i++)
         {
         	p = players.get(i);
-        	p.card_in_hand = 0;
         	p.drawn_card = 0;
         	p.last_used_card = 0;
         	p.status = 1;
+        	p.card_in_hand = this.draw_a_card();
         }
     }
     
@@ -144,26 +146,37 @@ public class dcd_love_letter {
     	return -1;
     }
     
-    public void player_action(Player p) {
+    public void player_action(Player p) throws IOException {
     	Random gen = new Random();
     	
     	// draw a card
     	p.drawn_card = this.draw_a_card();
     	
-    	// used a card
+    	// print cards in hand and just drawn
     	
-    	System.out.print("id: " + p.id + " player");
+    	// get input user selection to use
+    	System.out.print("select card: ");
+    	
+    	// print selected card
+    	
+    	// use card
+    	
+    	// save hand
+    	
 
-    	if (gen.nextInt(4) == 0)
-    	{
-    		p.status = 0;
-    		this.living_player_num--;
-    		System.out.println(" died");    		
-    	}
-    	else
-    	{
-    		System.out.println(" lived");    		
-    	}
+    	
+    	//System.out.print("id: " + p.id + " player");
+
+//    	if (gen.nextInt(4) == 0)
+//    	{
+//    		p.status = 0;
+//    		this.living_player_num--;
+//    		System.out.println(" died");    		
+//    	}
+//    	else
+//    	{
+//    		System.out.println(" lived");    		
+//    	}
     	
     }
     
