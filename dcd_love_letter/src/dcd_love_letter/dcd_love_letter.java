@@ -29,7 +29,7 @@ public class dcd_love_letter {
     }
     
     public void computer_action () {
-    	
+    	// bongjun 
     }
     
     public boolean check_round_over () {
