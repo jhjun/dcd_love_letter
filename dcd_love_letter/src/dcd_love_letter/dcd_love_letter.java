@@ -14,6 +14,8 @@ public class dcd_love_letter {
         turn = 0;
     }
     
+    // asfsfs
+    
     public int select_player () {
     	int player;
     	
